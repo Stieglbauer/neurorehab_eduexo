@@ -4,22 +4,17 @@ using UnityEngine;
 
 public class PeopleBehaviour : MonoBehaviour
 {
-    private int queuePosition;
-
     private Transform waypointA, waypointB;
 
-    public float trackProgress = 0, trackDistance, trackSpeed = 2.0f;
+    private float trackProgress = 0, trackDistance, trackSpeed = 2.0f;
 
-    public PeopleState currentState;
+    public PeopleState currentState { get; private set; } = PeopleState.spawning;
 
     public enum PeopleState
     {
         // game states
-        waiting,
+        //waiting,
         running,
-        cheering,
-        flying,
-        falling,
 
         // out-of-game state
         spawning,
@@ -28,55 +23,35 @@ public class PeopleBehaviour : MonoBehaviour
     private int trackSegment = 0;
 
     /// <summary>
-    /// Stay on the current position
-    /// </summary>
-    private void waiting()
-    {
-        // stay on position
-    }
-
-    /// <summary>
     /// Follow the track #trackSegment between waypoint A and B
     /// </summary>
     private void running()
     {
-        if (trackProgress > 1)
+        if (PeopleReferences.GetQueueIndex(trackSegment, this) == 0 && trackProgress >= 1 && PeopleReferences.RequestQueueEnd(trackSegment+1, this))
         {
-            SwitchToState(PeopleState.waiting);
-            return;
+            EnterSegment(++trackSegment);
+
+            if (currentState == PeopleState.spawning)
+            {
+                return;
+            }
         }
+
         this.transform.position = Vector3.Lerp(waypointA.position, waypointB.position, trackProgress);
-        trackProgress += trackSpeed * Time.deltaTime / trackDistance;
-    }
 
-    private void cheering()
-    {
-
-    }
-
-    private void flying()
-    {
-
-    }
-
-    private void falling()
-    {
-
+        Vector3 queuePos = PeopleReferences.GetQueuePosition(trackSegment, PeopleReferences.GetQueueIndex(trackSegment, this));
+        if (Vector3.Distance(waypointA.position, transform.position) > Vector3.Distance(waypointA.position, queuePos))
+        {
+            this.transform.position = queuePos;
+        } else
+        {
+            trackProgress += trackSpeed * Time.deltaTime / trackDistance;
+        }
     }
 
     private void SwitchToState(PeopleState newState)
     {
         currentState = newState;
-        if(newState == PeopleState.waiting)
-        {
-            transform.position = waypointB.position;
-            EnterSegment(++trackSegment);
-        }
-    }
-
-    private void FindState()
-    {
-        //currentState = PeopleState.running;
     }
 
     private void ActOnState()
@@ -92,7 +67,7 @@ public class PeopleBehaviour : MonoBehaviour
     /// <summary>
     /// Reset / Initialize the PeopleBehaviour object -> Can be reused after reaching the goal
     /// </summary>
-    private void Ini()
+    public void Ini()
     {
         EnterSegment(0);
 
@@ -101,19 +76,18 @@ public class PeopleBehaviour : MonoBehaviour
 
     private void EnterSegment(int newSegment)
     {
-        PeopleReferences.GetWaypoints(newSegment, ref waypointA, ref waypointB);
+        if(PeopleReferences.GetWaypoints(newSegment, ref waypointA, ref waypointB))
+        {
+            SwitchToState(PeopleState.spawning);
+        }
         trackDistance = Vector3.Distance(waypointA.position, waypointB.position);
         trackProgress = 0;
+        trackSegment = newSegment;
+        this.transform.position = waypointA.position;
     }
 
     private void Update()
     {
-        FindState();
         ActOnState();
-    }
-
-    private void Start()
-    {
-        Ini();
     }
 }
