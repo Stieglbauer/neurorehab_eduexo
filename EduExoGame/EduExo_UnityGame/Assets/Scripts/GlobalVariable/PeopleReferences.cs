@@ -11,8 +11,13 @@ public class PeopleReferences : MonoBehaviour
 
     [SerializeField]
     private float queueDistance;
+
+    [SerializeField]
+    private ArmBehaviour arm;
     
     private List<List<PeopleBehaviour>> queues;
+
+    public const int armSegment = 1;
 
     private static PeopleReferences reference;
     public static PeopleReferences GetReference()
@@ -41,7 +46,7 @@ public class PeopleReferences : MonoBehaviour
         {
             queues.Add(new List<PeopleBehaviour>());
         }
-        while (enterConditions.Count < GetSegmentCount()-1)
+        while (enterConditions.Count < GetSegmentCount())
         {
             enterConditions.Add(new List<EnterCondition>());
         }
@@ -80,6 +85,7 @@ public class PeopleReferences : MonoBehaviour
         if (!queue.Contains(people))
         {
             queue.Add(people);
+            HandleSegmentSwitch();
         }
 
         return queue.FindIndex(p => p == people);
@@ -89,17 +95,23 @@ public class PeopleReferences : MonoBehaviour
     {
         var reference = GetReference();
         bool requestGranted = false;
-        if(nextTrackSegment == reference.GetSegmentCount())
-        {
-            // always allow to leave last segment
-            requestGranted = true;
-        } else
-        {
-            // only allow to leave segment if the next one is not full
-            Transform waypointA = null, waypointB = null;
-            GetWaypoints(nextTrackSegment, ref waypointA, ref waypointB);
+        if (EnterCondition.EvalAll(reference.enterConditions[nextTrackSegment - 1])) {
+            if (nextTrackSegment == reference.GetSegmentCount())
+            {
+                // always allow to leave last segment
+                requestGranted = true;
+            } else if (reference.queues[nextTrackSegment].Count == 0)
+            {
+                // enter next one if next segment has no people queueing
+                requestGranted = true;
+            } else
+            {
+                // only allow to leave segment if the next one is not full
+                Transform waypointA = null, waypointB = null;
+                GetWaypoints(nextTrackSegment, ref waypointA, ref waypointB);
 
-            requestGranted = Vector3.Distance(waypointA.position, waypointB.position) >= (reference.queues[nextTrackSegment].Count) * reference.queueDistance && EnterCondition.EvalAll(reference.enterConditions[nextTrackSegment-1]);
+                requestGranted = Vector3.Distance(waypointA.position, waypointB.position) >= (reference.queues[nextTrackSegment].Count) * reference.queueDistance;
+            }
         }
 
         if(requestGranted)
@@ -113,5 +125,11 @@ public class PeopleReferences : MonoBehaviour
     public static void AddEnterCondition(EnterCondition condition, int trackSegment)
     {
         GetReference().enterConditions[trackSegment].Add(condition);
+    }
+
+    public static void HandleSegmentSwitch()
+    {
+        var reference = GetReference();
+        reference.arm.SetGrab(reference.queues[armSegment].Count > 0);
     }
 }

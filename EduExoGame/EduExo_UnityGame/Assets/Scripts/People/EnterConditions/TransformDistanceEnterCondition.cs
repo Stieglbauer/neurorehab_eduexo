@@ -10,8 +10,17 @@ public class TransformDistanceEnterCondition : EnterCondition
     [SerializeField]
     private float minDistance;
 
+    private float minDistanceSquared;
+
+    private void Awake()
+    {
+        minDistanceSquared = minDistance * minDistance;
+    }
+
     public override bool Eval()
     {
-        return Vector3.Distance(transformA.position, transformB.position) <= minDistance;
+        float deltaX = transformA.position.x - transformB.position.x;
+        float deltaY = transformA.position.y - transformB.position.y;
+        return deltaX * deltaX + deltaY * deltaY <= minDistanceSquared;
     }
 }

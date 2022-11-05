@@ -6,9 +6,14 @@ public class PeopleBehaviour : MonoBehaviour
 {
     private Transform waypointA, waypointB;
 
-    private float trackProgress = 0, trackDistance, trackSpeed = 2.0f;
+    private float trackProgress = 0, trackDistance;
+
+    private const float trackSpeed = 2.0f;
 
     public PeopleState currentState { get; private set; } = PeopleState.spawning;
+
+    [SerializeField]
+    private GameObject[] sprites;
 
     public enum PeopleState
     {
@@ -38,6 +43,9 @@ public class PeopleBehaviour : MonoBehaviour
         }
 
         this.transform.position = Vector3.Lerp(waypointA.position, waypointB.position, trackProgress);
+        this.transform.rotation = Quaternion.LookRotation(
+            new Vector3(waypointB.position.x - waypointA.position.x, waypointB.position.y - waypointA.position.y, 0),
+            Vector3.up);
 
         Vector3 queuePos = PeopleReferences.GetQueuePosition(trackSegment, PeopleReferences.GetQueueIndex(trackSegment, this));
         if (Vector3.Distance(waypointA.position, transform.position) > Vector3.Distance(waypointA.position, queuePos))
@@ -72,6 +80,15 @@ public class PeopleBehaviour : MonoBehaviour
         EnterSegment(0);
 
         currentState = PeopleState.running;
+
+        int rand = Random.Range(0, sprites.Length);
+
+        foreach(var sprite in sprites)
+        {
+            sprite.SetActive(false);
+        }
+
+        sprites[rand].SetActive(true);
     }
 
     private void EnterSegment(int newSegment)

@@ -9,8 +9,11 @@ public class ElbowAngle : MonoBehaviour
 {
     private SerialPort sp;
 
+    //[SerializeField]
+    //private AnimationTransformer[] animationTransformers;
+
     [SerializeField]
-    private AnimationTransformer[] animationTransformers;
+    private ArmBehaviour arm;
 
     [SerializeField]
     private float elbowangle = 0;
@@ -66,9 +69,10 @@ public class ElbowAngle : MonoBehaviour
     public void Update()
     {
         ReadUSBPort();
-        foreach(AnimationTransformer at in animationTransformers)
+        /*foreach(AnimationTransformer at in animationTransformers)
         {
             at.UpdateTransformation(elbowangle);
-        }
+        }*/
+        arm.SetAngle(elbowangle);
     }
 }
