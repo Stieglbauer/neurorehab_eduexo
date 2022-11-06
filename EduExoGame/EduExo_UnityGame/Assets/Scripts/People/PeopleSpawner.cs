@@ -7,16 +7,13 @@ public class PeopleSpawner : MonoBehaviour
     [SerializeField]
     private GameObject carPrefab;
 
-    [SerializeField]
-    private float spawnDelay;
-
     private List<PeopleBehaviour> peoples;
 
     private WaitForSeconds waitTime;
 
-    private void Start()
+    public void Start()
     {
-        waitTime = new WaitForSeconds(spawnDelay);
+        waitTime = new WaitForSeconds(TechnicalData.spawnRate);
 
         peoples = new List<PeopleBehaviour>();
         InstantiateNewCar();

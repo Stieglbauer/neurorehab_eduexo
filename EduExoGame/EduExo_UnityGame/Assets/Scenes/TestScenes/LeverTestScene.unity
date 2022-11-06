@@ -185,7 +185,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arm: {fileID: 1873332262}
   elbowangle: 0
-  port: 8
 --- !u!4 &200774475
 Transform:
   m_ObjectHideFlags: 0
@@ -513,6 +512,7 @@ Transform:
   - {fileID: 200774475}
   - {fileID: 267878269}
   - {fileID: 636731247}
+  - {fileID: 1708028723}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1473,6 +1473,51 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4947058182423396136, guid: eb8e520a56e505e47ab78a6326dadeee, type: 3}
   m_PrefabInstance: {fileID: 4947058181828085962}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1708028722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1708028723}
+  - component: {fileID: 1708028724}
+  m_Layer: 0
+  m_Name: USBReadStarter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1708028723
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708028722}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 515785158}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1708028724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1708028722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79a0985c7ecc55f4dafa5a0babae1f56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  usbReader: {fileID: 200774474}
 --- !u!4 &1760233227 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2292897469597412435, guid: 87ac9783b2a5b5748bad5338b27bdabe, type: 3}
