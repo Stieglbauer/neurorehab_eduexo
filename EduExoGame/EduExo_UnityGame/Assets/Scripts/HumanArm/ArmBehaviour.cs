@@ -3,12 +3,6 @@ using UnityEngine;
 public class ArmBehaviour : MonoBehaviour
 {
     [SerializeField]
-    private float angle;
-
-    [SerializeField]
-    private bool grab;
-
-    [SerializeField]
     private Renderer[] grabRenderer, nonGrabRenderer;
 
     [SerializeField]
@@ -16,8 +10,6 @@ public class ArmBehaviour : MonoBehaviour
 
     public void SetGrab(bool grab)
     {
-        this.grab = grab;
-
         foreach(var renderer in grabRenderer)
         {
             renderer.enabled = grab;
@@ -30,7 +22,6 @@ public class ArmBehaviour : MonoBehaviour
 
     public void SetAngle(float angle)
     {
-        this.angle = angle;
-        this.arm.rotation = Quaternion.Euler(new Vector3(0, 0, angle + 22));
+        this.arm.localRotation = Quaternion.Euler(new Vector3(0, 0, angle));
     }
 }

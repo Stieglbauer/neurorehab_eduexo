@@ -13,6 +13,9 @@ public class ElbowAngle : MonoBehaviour
     //private AnimationTransformer[] animationTransformers;
 
     [SerializeField]
+    private Logger logger;
+
+    [SerializeField]
     private ArmBehaviour arm;
 
     public float elbowangle { get; private set; } = 0;
@@ -38,7 +41,7 @@ public class ElbowAngle : MonoBehaviour
 
     private void OnDisable()
     {
-        sp.Close();
+        sp?.Close();
     }
 
     public bool ReadUSBPort()
@@ -49,6 +52,13 @@ public class ElbowAngle : MonoBehaviour
             try
             {
                 elbowangle = sp.ReadByte() + 256 * sp.ReadByte();
+                int forceSensor = sp.ReadByte() + 256 * sp.ReadByte();
+                int emgSignal = sp.ReadByte() + 256 * sp.ReadByte();
+                int motorTarget = sp.ReadByte() + 256 * sp.ReadByte();
+                float transformedAngle = TransformAngle(elbowangle);
+
+
+                logger?.Log(emgSignal, forceSensor, elbowangle, transformedAngle, motorTarget);
 
                 /*if(elbowangle < 90)
                 {
@@ -74,6 +84,11 @@ public class ElbowAngle : MonoBehaviour
     public void Update()
     {
         ReadUSBPort();
-        arm?.SetAngle(elbowangle);
+        arm?.SetAngle(TransformAngle(elbowangle));
+    }
+
+    public static float TransformAngle(float rawAngle)
+    {
+        return ((rawAngle - TechnicalData.forearmStretched) / (TechnicalData.forearm90 - TechnicalData.forearmStretched)) * (-90.0f);// + 23.0f;
     }
 }

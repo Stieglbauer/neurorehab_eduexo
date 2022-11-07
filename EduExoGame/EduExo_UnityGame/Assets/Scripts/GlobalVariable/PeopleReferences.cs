@@ -14,6 +14,12 @@ public class PeopleReferences : MonoBehaviour
 
     [SerializeField]
     private ArmBehaviour arm;
+
+    [SerializeField]
+    private PointCounter pointCounter;
+
+    [SerializeField]
+    private Logger logger;
     
     private List<List<PeopleBehaviour>> queues;
 
@@ -131,5 +137,15 @@ public class PeopleReferences : MonoBehaviour
     {
         var reference = GetReference();
         reference.arm.SetGrab(reference.queues[armSegment].Count > 0);
+    }
+
+    public static PointCounter GetPointCounter()
+    {
+        return GetReference().pointCounter;
+    }
+
+    public static Logger GetLogger()
+    {
+        return GetReference().logger;
     }
 }

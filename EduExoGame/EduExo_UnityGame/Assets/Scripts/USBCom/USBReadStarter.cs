@@ -9,9 +9,6 @@ public class USBReadStarter : MonoBehaviour
 
     private void Awake()
     {
-        //DEBUG
-        TechnicalData.usbPort = 8;
-
         usbReader.SetPort(TechnicalData.usbPort);
     }
 }

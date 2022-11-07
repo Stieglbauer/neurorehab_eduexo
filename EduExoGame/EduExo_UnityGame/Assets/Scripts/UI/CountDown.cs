@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class CountDown : MonoBehaviour
 {
@@ -19,6 +20,11 @@ public class CountDown : MonoBehaviour
     void Update()
     {
         int remainingSeconds = Mathf.CeilToInt(TechnicalData.timeLimit - (Time.time - startTime));
+        if(remainingSeconds <= 0)
+        {
+            remainingSeconds = 0;
+            SceneManager.LoadScene(0);
+        }
         text.SetText(TimeReader.SecondsToTime(remainingSeconds));
     }
 }

@@ -15,6 +15,7 @@ public class PeopleBehaviour : MonoBehaviour
     [SerializeField]
     private GameObject[] sprites;
 
+
     public enum PeopleState
     {
         // game states
@@ -93,9 +94,21 @@ public class PeopleBehaviour : MonoBehaviour
 
     private void EnterSegment(int newSegment)
     {
+        if(newSegment == 1)
+        {
+            PeopleReferences.GetLogger().Log(Time.time + ": Grabbed object");
+        } else if(newSegment == 2)
+        {
+            PeopleReferences.GetLogger().Log(Time.time + ": Released object");
+        }
+
         if(PeopleReferences.GetWaypoints(newSegment, ref waypointA, ref waypointB))
         {
             SwitchToState(PeopleState.spawning);
+            foreach(var sprite in sprites)
+            {
+                sprite.SetActive(false);
+            }
         }
         trackDistance = Vector3.Distance(waypointA.position, waypointB.position);
         trackProgress = 0;
