@@ -97,15 +97,18 @@ public class PeopleBehaviour : MonoBehaviour
         if(newSegment == 1)
         {
             PeopleReferences.GetLogger().Log(Time.time + ": Grabbed object");
+            PeopleReferences.PlayGrabSound();
         } else if(newSegment == 2)
         {
             PeopleReferences.GetLogger().Log(Time.time + ": Released object");
+            PeopleReferences.PlayReleaseSound();
         }
 
         if(PeopleReferences.GetWaypoints(newSegment, ref waypointA, ref waypointB))
         {
             SwitchToState(PeopleState.spawning);
-            foreach(var sprite in sprites)
+            PeopleReferences.PlayPointSound();
+            foreach (var sprite in sprites)
             {
                 sprite.SetActive(false);
             }

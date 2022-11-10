@@ -20,7 +20,13 @@ public class PeopleReferences : MonoBehaviour
 
     [SerializeField]
     private Logger logger;
-    
+
+    [SerializeField]
+    private AudioSource audioSource;
+
+    [SerializeField]
+    private AudioClip grab, release, point;
+
     private List<List<PeopleBehaviour>> queues;
 
     public const int armSegment = 1;
@@ -147,5 +153,23 @@ public class PeopleReferences : MonoBehaviour
     public static Logger GetLogger()
     {
         return GetReference().logger;
+    }
+
+    public static void PlayGrabSound()
+    {
+        var reference = GetReference();
+        reference.audioSource.PlayOneShot(reference.grab);
+    }
+
+    public static void PlayReleaseSound()
+    {
+        var reference = GetReference();
+        reference.audioSource.PlayOneShot(reference.release);
+    }
+
+    public static void PlayPointSound()
+    {
+        var reference = GetReference();
+        reference.audioSource.PlayOneShot(reference.point);
     }
 }

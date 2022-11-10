@@ -23,6 +23,8 @@ public class GameSetup : MonoBehaviour
     {
         arm.rotation = Quaternion.Euler(0, 0, TechnicalData.upperArmAngle);
         MirrorScene(TechnicalData.leftArm);
+        TechnicalData.timeLimit = 120;
+        TechnicalData.spawnRate = 10;
     }
 
     private void MirrorScene(bool mirror)

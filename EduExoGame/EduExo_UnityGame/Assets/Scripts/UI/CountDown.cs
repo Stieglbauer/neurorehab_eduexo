@@ -19,6 +19,11 @@ public class CountDown : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(TechnicalData.timeLimit <= 0)
+        {
+            text.enabled = false;
+            return;
+        }
         int remainingSeconds = Mathf.CeilToInt(TechnicalData.timeLimit - (Time.time - startTime));
         if(remainingSeconds <= 0)
         {

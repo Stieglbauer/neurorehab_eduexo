@@ -22,6 +22,6 @@ public class ArmBehaviour : MonoBehaviour
 
     public void SetAngle(float angle)
     {
-        this.arm.localRotation = Quaternion.Euler(new Vector3(0, 0, angle));
+        this.arm.localRotation = Quaternion.Euler(new Vector3(0, 0, angle + 20));
     }
 }
