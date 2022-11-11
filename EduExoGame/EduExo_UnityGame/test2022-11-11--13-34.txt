@@ -1,0 +1,2 @@
+UA-Ange: 0, ForearmStretched: 0, Forearm: 0, LeftArm? Yes
+Time, EMG-Signal, Force-Value, Elbow-Angle, Transformed-Angle, MotorTarget
